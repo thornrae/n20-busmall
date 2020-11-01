@@ -15,7 +15,7 @@
 
 //global variables
 var products = [];
-var totalClicksAllowed = 5;
+var totalClicksAllowed = 25;
 var clicks = 0;
 var productContainer = document.getElementById('product-container');
 var productOne = document.getElementById('product-one');
