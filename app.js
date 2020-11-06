@@ -3,7 +3,7 @@
 //create constructor for each product with name & file path of image
 //track votes
 //25 rounds (keep global)
-//votes & views 
+//votes & views
 
 //randomly generate three unique product images
 
@@ -21,7 +21,8 @@ var productContainer = document.getElementById('product-container');
 var productOne = document.getElementById('product-one');
 var productTwo = document.getElementById('product-two');
 var productThree = document.getElementById('product-three');
-var resultList = document.getElementById('list');
+// var resultList = document.getElementById('list');
+
 //constructor
 function Product(imgName){
   this.imgName = imgName;
@@ -58,15 +59,28 @@ function getRandomProductAtIndex(){
 
 var currentlyShowing = [];
 
-function renderProducts(){
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/do...while
-  do {
-    var productImageOne = getRandomProductAtIndex();
-    var productImageTwo = getRandomProductAtIndex();
-    var productImageThree = getRandomProductAtIndex();
-  }
 
-  while((productImageOne === productImageTwo) || (productImageOne === productImageThree) || (productImageTwo === productImageThree));
+function populateRender () {
+  while(currentlyShowing.length > 3) {
+    currentlyShowing.shift();
+  }
+  while(currentlyShowing.length < 6){
+    var uniqueProduct = getRandomProductAtIndex();
+    while (currentlyShowing.includes(uniqueProduct)){
+      uniqueProduct = getRandomProductAtIndex();
+    }
+    currentlyShowing.push(uniqueProduct);
+  }
+  console.log('currentlyshowing: ', currentlyShowing);
+}
+
+function renderProducts(){
+  populateRender();
+
+  var productImageOne = currentlyShowing[0];
+  var productImageTwo = currentlyShowing[1];
+  var productImageThree = currentlyShowing[2];
+
 
   productOne.src = products[productImageOne].src;
   productOne.alt = products[productImageOne].imgName;
@@ -82,20 +96,23 @@ function renderProducts(){
   productThree.alt = products[productImageThree].imgName;
   products[productImageThree].views++;
 
-  currentlyShowing.push(productImageOne, productImageTwo, productImageThree);
+  if (clicks === totalClicksAllowed){
+    productContainer.removeEventListener('click', handleClick);
+    makeResultsChart();
 
+  // currentlyShowing.push(productImageOne, productImageTwo, productImageThree);
+  }
 }
-
 
 // console.log('currently showing:' + currentlyShowing);
 
-function renderResults(){
-  for (var i = 0; i < products.length; i++){
-    var li = document.createElement('li');
-    li.textContent = `${products[i].imgName} had ${products[i].votes} votes and was seen ${products[i].views} times`;
-    resultList.appendChild(li);
-  }
-}
+// function renderResults(){
+//   for (var i = 0; i < products.length; i++){
+//     var li = document.createElement('li');
+//     li.textContent = `${products[i].imgName} had ${products[i].votes} votes and was seen ${products[i].views} times`;
+//     resultList.appendChild(li);
+//   }
+// }
 
 renderProducts();
 
@@ -103,21 +120,69 @@ function handleClick(event){
   var clickedProduct = event.target.alt;
   clicks++;
 
-  console.log('this is clicked product' , clickedProduct);
+  // console.log('this is clicked product' , clickedProduct);
   for(var i=0; i < products.length; i++){
     if (clickedProduct === products[i].imgName){
-      console.log('product[i].name:' , products[i].imgName);
+      // console.log('product[i].name:' , products[i].imgName);
       products[i].votes++;
     }
   }
 
   renderProducts();
-  if (clicks === totalClicksAllowed){
-    productContainer.removeEventListener('click', handleClick);
-    renderResults();
-  }
+
 }
 
 
+
+function makeResultsChart() {
+
+  var productViews = [];
+  var productVotes= [];
+
+  for(var i=0; i < products.length; i++){
+    var singleProductView = products[i].views;
+    productViews.push(singleProductView);
+  }
+
+  for(var j=0; j < products.length; j++){
+    var singleProductVote = products[j].votes;
+    productVotes.push(singleProductVote);
+  }
+
+  var ctx = document.getElementById('resultsChart').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Banana', 'Bathroom', 'Boots', 'Breakfast', 'Bubblegum', 'Chair', 'Cthulhu', 'Dog-Duck', 'Dragon', 'Pen', 'Pet Sweep', 'Scissors', 'Shark', 'Sweep', 'Tauntaun', 'Unicorn', 'USB', 'Water Can', 'Wine Glass'],
+      datasets: [{
+        label: '# of Views',
+        data: productViews,
+        backgroundColor:
+        'rgba(255, 99, 132, 0.2)',
+        borderColor:
+        'rgba(255, 99, 132, 1)',
+        borderWidth: 1
+      }, {
+        label: '# of Votes',
+        data: productVotes,
+        backgroundColor:
+        'rgba(54, 162, 235, 0.2)',
+        borderColor:
+        'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
 
 productContainer.addEventListener('click', handleClick);
