@@ -10,3 +10,7 @@ body {
   margin-right: 20px;
 }
 
+#chart {
+  width: 600px;
+  margin: auto;
+}
