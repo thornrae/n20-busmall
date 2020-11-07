@@ -1,21 +1,8 @@
 'use strict';
 
-//create constructor for each product with name & file path of image
-//track votes
-//25 rounds (keep global)
-//votes & views
-
-//randomly generate three unique product images
-
-//display randomly selected product images side by side
-
-//event listener where images are displayed
-
-//once click thru product, generate three new
-
 //global variables
 var products = [];
-var totalClicksAllowed = 25;
+var totalClicksAllowed = 5;
 var clicks = 0;
 var productContainer = document.getElementById('product-container');
 var productOne = document.getElementById('product-one');
@@ -31,26 +18,33 @@ function Product(imgName){
   this.votes = 0;
   products.push(this);
 }
-//executable code
-new Product('banana');
-new Product('bathroom');
-new Product('boots');
-new Product('breakfast');
-new Product('bubblegum');
-new Product('chair');
-new Product('cthulhu');
-new Product('dog-duck');
-new Product('dragon');
-new Product('pen');
-new Product('pet-sweep');
-new Product('scissors');
-new Product('shark');
-new Product('sweep');
-new Product('tauntaun');
-new Product('unicorn');
-new Product('usb');
-new Product('water-can');
-new Product('wine-glass');
+
+var retrievedResults = localStorage.getItem('prodcutResults');
+
+if(retrievedResults){
+  var parsedProductResults = JSON.parse(retrievedResults);
+  products = parsedProductResults;
+} else {
+  new Product('banana');
+  new Product('bathroom');
+  new Product('boots');
+  new Product('breakfast');
+  new Product('bubblegum');
+  new Product('chair');
+  new Product('cthulhu');
+  new Product('dog-duck');
+  new Product('dragon');
+  new Product('pen');
+  new Product('pet-sweep');
+  new Product('scissors');
+  new Product('shark');
+  new Product('sweep');
+  new Product('tauntaun');
+  new Product('unicorn');
+  new Product('usb');
+  new Product('water-can');
+  new Product('wine-glass');
+}
 
 //randomizer function
 function getRandomProductAtIndex(){
@@ -100,19 +94,10 @@ function renderProducts(){
     productContainer.removeEventListener('click', handleClick);
     makeResultsChart();
 
-  // currentlyShowing.push(productImageOne, productImageTwo, productImageThree);
+    var productResults = JSON.stringify(products);
+    localStorage.setItem('productResults', productResults);
   }
 }
-
-// console.log('currently showing:' + currentlyShowing);
-
-// function renderResults(){
-//   for (var i = 0; i < products.length; i++){
-//     var li = document.createElement('li');
-//     li.textContent = `${products[i].imgName} had ${products[i].votes} votes and was seen ${products[i].views} times`;
-//     resultList.appendChild(li);
-//   }
-// }
 
 renderProducts();
 
@@ -120,10 +105,8 @@ function handleClick(event){
   var clickedProduct = event.target.alt;
   clicks++;
 
-  // console.log('this is clicked product' , clickedProduct);
   for(var i=0; i < products.length; i++){
     if (clickedProduct === products[i].imgName){
-      // console.log('product[i].name:' , products[i].imgName);
       products[i].votes++;
     }
   }
