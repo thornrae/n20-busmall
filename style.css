@@ -1,16 +1,77 @@
 body {
   background-color: aquamarine;
+  width: 500px;
+  margin: auto;
 }
 
 #product-container img {
-  width: 200px;
-  height: 200px;
-  padding: 40px;
-  border: 5px solid red;
-  margin-right: 20px;
+  width: 150px;
+  height: 150px;
+  /* border: 5px solid teal; */
+  margin: auto;
+  display: block;
+  margin-top: 20px;
+  background-color: teal;
 }
+
+#hover-product-one{
+  background: teal;
+  transition-property: background;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+  width: 160px;
+  height: 160px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+#hover-product-one:hover {
+background: white;
+cursor: crosshair;
+}
+
+#hover-product-two{
+  background: teal;
+  transition-property: background;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+  width: 160px;
+  height: 160px;
+  margin: auto;
+}
+
+#hover-product-two:hover {
+background: white;
+cursor: crosshair;
+}
+
+#hover-product-three{
+  background: teal;
+  transition-property: background;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+  width: 160px;
+  height: 160px;
+  margin: auto;
+}
+
+#hover-product-three:hover {
+background: white;
+cursor: crosshair;
+}
+
+
+/* img:hover{
+  cursor: crosshair;
+} */
 
 #chart {
   width: 600px;
   margin: auto;
+}
+
+h3 {
+  font-family: 'Major Mono Display', monospace;
+  font-size: 30px;
+  text-align: center;
 }
