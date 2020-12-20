@@ -19,7 +19,7 @@ function Product(imgName){
   products.push(this);
 }
 
-var retrievedResults = localStorage.getItem('prodcutResults');
+var retrievedResults = localStorage.getItem('productResults');
 
 if(retrievedResults){
   var parsedProductResults = JSON.parse(retrievedResults);
